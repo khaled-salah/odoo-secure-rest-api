@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rest_api_client_view_tree" model="ir.ui.view">
+        <field name="name">rest.api.client.tree</field>
+        <field name="model">rest.api.client</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="client_id"/>
+                <field name="user_id"/>
+                <field name="scope_leads_read"/>
+                <field name="scope_leads_write"/>
+                <field name="last_token_at"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="rest_api_client_view_form" model="ir.ui.view">
+        <field name="name">rest.api.client.form</field>
+        <field name="model">rest.api.client</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_generate_secret" type="object" class="btn-primary"
+                            string="Generate Secret" invisible="has_secret"/>
+                    <button name="action_generate_secret" type="object"
+                            string="Rotate Secret" invisible="not has_secret"
+                            confirm="The current secret will stop working immediately. Continue?"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="e.g. Merchant Portal"/></h1>
+                    </div>
+                    <group>
+                        <group string="Identity">
+                            <field name="client_id" widget="CopyClipboardChar"/>
+                            <field name="has_secret"/>
+                            <field name="user_id"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                        <group string="Access">
+                            <field name="scope_leads_read"/>
+                            <field name="scope_leads_write"/>
+                            <field name="token_ttl_minutes"/>
+                            <field name="last_token_at"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="rest_api_client_action" model="ir.actions.act_window">
+        <field name="name">REST API Clients</field>
+        <field name="res_model">rest.api.client</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="rest_api_client_menu"
+              name="REST API Clients"
+              parent="base.menu_custom"
+              action="rest_api_client_action"
+              sequence="50"/>
+</odoo>
